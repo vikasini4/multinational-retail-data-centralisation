@@ -1,0 +1,41 @@
+import pandas as pd
+
+
+class DataCleaning:
+    
+    @staticmethod
+    def clean_user_data(df):
+        # Replace NULL values with 0
+        df.fillna(0, inplace=True)
+        # Replace incorrectly typed values in the 'age' column with NULL
+        df.loc[df['age'].apply(type) != int, 'age'] = None
+        # Remove rows where 'dob' is not in yyyy-mm-dd format
+        df = df[df['dob'].str.match('\d{4}-\d{2}-\d{2}')]
+        return df
+    
+    @staticmethod
+    def clean_card_data(df):
+        # Replace NULL values with 0
+        df.fillna(0, inplace=True)
+        # Remove non-numeric characters from 'card_number' column
+        df['card_number'] = df['card_number'].str.replace('[^0-9]', '')
+        # Remove rows where 'card_number' is not 16 digits
+        df = df[df['card_number'].str.len() == 16]
+        return df
+    
+    @staticmethod
+    def convert_product_weights(df):
+        # Convert weights to decimal values
+        df['weight'] = df['weight'].str.replace('kg', '').str.replace('g', '').astype(float)
+        df['weight'] /= 1000
+        return df
+    
+    @staticmethod
+    def clean_store_data(df):
+        # Replace NULL values with 0
+        df.fillna(0, inplace=True)
+        # Remove rows where 'store_number' is not numeric
+        df = df[df['store_number'].apply(type) == int]
+        # Remove rows where 'store_name' contains non-ASCII characters
+        df = df[df['store_name'].apply(lambda x: all(ord(c) < 128 for c in x))]
+        return df

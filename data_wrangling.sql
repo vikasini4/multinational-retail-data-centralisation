@@ -104,4 +104,33 @@ SET weight_class = CASE
 
 -- Replace the ? placeholder with the appropriate VARCHAR length for the weight_class column.
 
+-- Rename the removed column to still_available
+ALTER TABLE dim_products
+RENAME COLUMN removed TO still_available;
+
+-- Change the data types of the columns
+ALTER TABLE dim_products
+ALTER COLUMN product_price TYPE FLOAT USING product_price::FLOAT;
+ALTER TABLE dim_products
+ALTER COLUMN weight TYPE FLOAT USING weight::FLOAT;
+ALTER TABLE dim_products
+ALTER COLUMN EAN TYPE VARCHAR(?);
+ALTER TABLE dim_products
+ALTER COLUMN product_code TYPE VARCHAR(?);
+ALTER TABLE dim_products
+ALTER COLUMN date_added TYPE DATE USING date_added::DATE;
+ALTER TABLE dim_products
+ALTER COLUMN uuid TYPE UUID USING uuid::UUID;
+ALTER TABLE dim_products
+ALTER COLUMN still_available TYPE BOOL USING CASE 
+                                                  WHEN still_available = 'TRUE' THEN TRUE
+                                                  WHEN still_available = 'FALSE' THEN FALSE
+                                                  ELSE NULL
+                                              END;
+ALTER TABLE dim_products
+ALTER COLUMN weight_class TYPE VARCHAR(?);
+
+-- Replace the ? placeholders with the appropriate VARCHAR lengths for the EAN, product_code, and weight_class columns.
+
+
 

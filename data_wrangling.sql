@@ -83,4 +83,25 @@ ALTER COLUMN continent TYPE VARCHAR(255) USING continent::VARCHAR(255);
 UPDATE store_details_table
 SET location = 'N/A'
 WHERE location IS NULL AND website IS NOT NULL;
+--
+-- Remove the £ character from product_price
+UPDATE products
+SET product_price = REPLACE(product_price, '£', '');
+
+-- Add the weight_class column
+ALTER TABLE products
+ADD COLUMN weight_class VARCHAR(?);
+
+-- Update the weight_class values based on the weight range
+UPDATE products
+SET weight_class = CASE 
+                        WHEN weight < 2 THEN 'Light'
+                        WHEN weight >= 2 AND weight < 40 THEN 'Mid_Sized'
+                        WHEN weight >= 40 AND weight < 140 THEN 'Heavy'
+                        WHEN weight >= 140 THEN 'Truck_Required'
+                        ELSE NULL
+                   END;
+
+-- Replace the ? placeholder with the appropriate VARCHAR length for the weight_class column.
+
 

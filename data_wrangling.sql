@@ -140,5 +140,23 @@ ALTER COLUMN time_period TYPE VARCHAR(?),
 ALTER COLUMN date_uuid TYPE UUID;
 
 
+-- Updating the dim_card_details
+
+SELECT length(max(cast(card_number as Text)))
+FROM dim_card_details
+GROUP BY card_number
+ORDER BY length(max(cast(card_number as Text))) desc
+LIMIT 1; -- = to 19
+
+SELECT length(max(cast(expiry_date as Text)))
+FROM dim_card_details
+GROUP BY expiry_date
+ORDER BY length(max(cast(expiry_date as Text))) desc
+LIMIT 1; -- = 5
+
+ALTER TABLE dim_card_details
+	ALTER COLUMN card_number TYPE VARCHAR(19),
+	ALTER COLUMN expiry_date TYPE VARCHAR(5),
+	ALTER COLUMN date_payment_confirmed TYPE DATE USING CAST(date_payment_confirmed as DATE);
 
 

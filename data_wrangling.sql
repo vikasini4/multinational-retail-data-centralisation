@@ -132,5 +132,13 @@ ALTER COLUMN weight_class TYPE VARCHAR(?);
 
 -- Replace the ? placeholders with the appropriate VARCHAR lengths for the EAN, product_code, and weight_class columns.
 
+ALTER TABLE dim_date_times 
+ALTER COLUMN month TYPE VARCHAR(?),
+ALTER COLUMN year TYPE VARCHAR(?),
+ALTER COLUMN day TYPE VARCHAR(?),
+ALTER COLUMN time_period TYPE VARCHAR(?),
+ALTER COLUMN date_uuid TYPE UUID;
+
+
 
 
